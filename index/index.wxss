@@ -1,0 +1,118 @@
+.intro {
+  display: flex;
+  height: 200rpx;
+
+}
+
+.radio {
+  width: 60rpx;
+  display: flex;
+  align-items: center;
+}
+
+.select {
+  width: 60rpx;
+  height: 60rpx;
+  border: 2rpx solid black;
+  border-radius: 50%;
+}
+
+.right {
+  flex: 1;
+  display: flex;
+}
+
+.img {
+  width: 200rpx;
+  background-color: blue;
+}
+
+.message {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.price {
+  display: flex;
+  justify-content: space-between;
+}
+
+.type {
+  padding: 0 20rpx;
+  background-color: #cccccc;
+  text-align: center;
+}
+
+.number {
+  width: 200rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hamdle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 150rpx;
+}
+
+.jian,
+.jia {
+  width: 30rpx;
+  height: 30rpx;
+  background-color: #9fad1c;
+  color: white;
+  font-size: 30rpx;
+  text-align: center;
+  font-weight: 900;
+  line-height: 30rpx;
+  border-radius: 50%;
+}
+
+.vanPopup {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 200rpx;
+}
+
+.typeList {
+  background-color: yellow;
+  padding: 0 20rpx;
+
+}
+.vantPopupHamdle {
+
+ display: flex;
+ justify-content: space-between;
+}
+.total {
+  height: 100rpx;
+  position:fixed;
+  bottom: 0rpx;
+  display: flex;
+  width: 100%;
+  border-top: 1px solid #f2f2f2;
+
+}
+.totalPrize{
+  width: 80%;
+  right: 0rpx;
+
+}
+.totalNum{
+  text-align: right;
+}
+.totallirun{
+  text-align: right;
+}
+.Settlement{
+  flex: 1;
+  text-align: center;
+  line-height: 100rpx;
+  background-color: #fada63;
+  color: white;
+}
