@@ -45,29 +45,29 @@ Page({
     typeList: [],
     //保存各个规格的原本价钱
     StaretypePrice: 0,
+    //选择规格的类型的索引值
     typeListIndex: 0,
     // 总价格
     totalPrize: 0,
     // 总利润
-    totallirun: 0,
-    StaretotalPrice: 0,
-    //保存最初总返利的价格
-    Staretotallirun: 0
+    totallirun: 0
   },
   //点击选择规格时
   selectType(e) {
+    const { index } = e.target.dataset
     this.setData({
       show: true,
       //这里之所以声明了typeListIndex来保存当前索引是为了方便后面用
-      typeListIndex: e.target.dataset.index,
+      typeListIndex: index,
       //这里可以看到：左右都是相同的 因为下面又改变了typeList的值 所以右边也会跟着改变 所以这样是不行的 所以我们使用深克隆来解决同步更改的问题
-      typeList: JSON.parse(JSON.stringify(this.data.list[e.target.dataset.index].typeList))
+      typeList: JSON.parse(JSON.stringify(this.data.list[index].typeList))
     })
   },
   //点击选择哪个类型
   seletePopupType(e) {
+    const { index } = e.target.dataset
     this.data.typeList.forEach(element => (element.status = false))
-    this.data.typeList[e.target.dataset.index].status = true
+    this.data.typeList[index].status = true
     this.setData({
       typeList: this.data.typeList
     })
@@ -78,6 +78,8 @@ Page({
    * 而底部的价格与规格、数量、商品的选中状态有关，也就是说有三个操作会触发这个价格更新，所以应该抽取成通用的函数
    */
   updatePrice(index) {
+    this.data.totalPrize = 0
+    this.data.totallirun = 0
     this.data.list
       .filter(item => item.clickRadio)
       .forEach(item => {
@@ -97,13 +99,11 @@ Page({
     if (this.data.list[index].selectType === '选择规格') {
       wx.showToast({
         title: '请选择规格',
-        icon: 'fail',
         duration: 1000
       })
     } else if (this.data.list[index].number === 0) {
       wx.showToast({
         title: '请选择数量',
-        icon: 'fail',
         duration: 1000
       })
     } else {
@@ -111,7 +111,6 @@ Page({
       this.setData({
         list: this.data.list
       })
-      this.data.totalPrize = 0
       this.updatePrice(index)
     }
   },
@@ -123,21 +122,22 @@ Page({
   },
   // 选中一个规格，需要更新总价格
   sure() {
-    this.data.list[this.data.typeListIndex].typeList = this.data.typeList
+    const typeListIndex = this.data.typeListIndex
+    this.data.list[typeListIndex].typeList = this.data.typeList
     this.setData({
       list: this.data.list
     })
     //如何判断哪一个类型被选中 然后获取选中的名字？可以通过我们的控制台里的AppData来观察 可以看到选中时 typeList里的选中项的status会变成true 所以我们就根据查看这个数组里哪个status为true 就获取谁的名字
     //typeList是一个数组 找到这个数组里哪一项的status属性 为true
-    if (this.data.list[this.data.typeListIndex].typeList.find(item => item.status)) {
+    const selectTypeItem = this.data.list[typeListIndex].typeList.find(item => item.status)
+    if (selectTypeItem) {
       //find 函数已经返回了这一整项了 所以可以直接.typeName
-      this.data.list[this.data.typeListIndex].selectType = this.data.list[this.data.typeListIndex].typeList.find(item => item.status).typeName
+      this.data.list[typeListIndex].selectType = selectTypeItem.typeName
       //价格同步更改
-      if (this.data.list[this.data.typeListIndex].number === 0) {
-        this.data.list[this.data.typeListIndex].profit = this.data.list[this.data.typeListIndex].typeList.find(item => item.status).typePrice
+      if (this.data.list[typeListIndex].number === 0) {
+        this.data.list[typeListIndex].profit = selectTypeItem.typePrice
       } else {
-        this.data.list[this.data.typeListIndex].profit =
-          this.data.list[this.data.typeListIndex].typeList.find(item => item.status).typePrice * this.data.list[this.data.typeListIndex].number
+        this.data.list[typeListIndex].profit = selectTypeItem.typePrice * this.data.list[typeListIndex].number
       }
 
       //this.setData只能设置最外一层属性 不能设置属性里面的属性 所以上面就先改变this.data.list里要改变的名字 再直接整个list重新赋值
@@ -159,7 +159,6 @@ Page({
       if (this.data.list[index].number === 0) {
         wx.showToast({
           title: '数量不能低于0',
-          icon: 'fail',
           duration: 1000
         })
         // 提示之后，return 出来，不执行下面的操作了
@@ -178,22 +177,23 @@ Page({
          * 那这里不就是一样的了~通过data-index 传过来就行了
          */
         this.data.list[index].number--
-        if (this.data.list[index].profit !== 0) {
+        if (this.data.list[index].selectType !== '选择规格') {
           this.data.StaretypePrice = this.data.list[index].typeList.find(item => item.status).typePrice
           this.data.list[index].profit = this.data.StaretypePrice * this.data.list[index].number
         }
-        this.data.totalPrize -= 1 * this.data.list[index].price
-        this.data.totallirun -= 1 * this.data.list[index].typeList.find(item => item.status).typePrice
+        // this.data.totalPrize -= 1 * this.data.list[index].price
+        // this.data.totallirun -= 1 * this.data.list[index].typeList.find(item => item.status).typePrice
+        this.updatePrice()
         this.setData({
-          list: this.data.list,
-          totalPrize: this.data.totalPrize,
-          totallirun: this.data.totallirun
+          list: this.data.list
+          // totalPrize: this.data.totalPrize,
+          // totallirun: this.data.totallirun
         })
       }
     } else if (handleType === 'add') {
       this.data.list[index].number++
       // 你把list setdata 成一个数字了 对哦。。
-      if (this.data.list[index].profit !== 0) {
+      if (this.data.list[index].profit !== '选择规格') {
         this.data.StaretypePrice = this.data.list[index].typeList.find(item => item.status).typePrice
         this.data.list[index].profit = this.data.StaretypePrice * this.data.list[index].number
       }

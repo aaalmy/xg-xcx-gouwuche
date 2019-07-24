@@ -1,6 +1,6 @@
-<view class="intro"  wx:for="{{list}}" wx:key="index">
+<view class="intro" wx:for="{{list}}" wx:key="index">
   <view class='radio'>
-    <view class="select" bindtap="clickRadio" data-index="{{index}}"  style="background-color:{{item.clickRadio ? 'yellow' : ''}}"></view>
+    <view class="select" bindtap="clickRadio" data-index="{{index}}" style="background-color:{{item.clickRadio ? 'yellow' : ''}}"></view>
   </view>
   <view class='right'>
     <view class="img"></view>
@@ -14,15 +14,19 @@
         <view class="number">
           <view class="money">赚￥{{item.profit}}</view>
           <view class="hamdle">
-            <view class="jian" data-index="{{index}}" data-handle-type="subtract" bindtap="handleNum">-</view>
+            <view class="jian" data-index="{{index}}" data-handle-type="subtract" bindtap="handleNum">
+              -
+            </view>
             <view class="num">{{item.number}}</view>
-            <view class="jia" data-index="{{index}}"  data-handle-type="add" bindtap="handleNum">+</view>
+            <view class="jia" data-index="{{index}}" data-handle-type="add" bindtap="handleNum">
+              +
+            </view>
           </view>
         </view>
       </view>
     </view>
   </view>
-    <view class="total">
+  <view class="total">
     <view class="totalPrize">
       <view class="totalNum">合计：￥{{totalPrize}}</view>
       <view class="totallirun">总返利：￥{{totallirun}}</view>
@@ -36,6 +40,8 @@
     <view bindtap="vantPopupClose">取消</view>
   </view>
   <view class="vanPopup">
-    <view class="typeList" wx:for="{{typeList}}" wx:key="index" bindtap="seletePopupType" data-index="{{index}}" style="background-color:{{item.status ? 'red' : ''}}">{{item.typeName}}</view>
+    <view class="typeList" wx:for="{{typeList}}" wx:key="index" bindtap="seletePopupType" data-index="{{index}}" style="background-color:{{item.status ? 'red' : ''}}">
+      {{item.typeName}}
+    </view>
   </view>
 </van-popup>
